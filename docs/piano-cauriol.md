@@ -130,6 +130,63 @@ Limiti noti:
 - La news "I Nostri Sponsor" (17.12.2024) è un doppione della pagina Sponsor.
 - Sul vecchio sito molte foto hanno il nome del file come testo alternativo: da migliorare.
 
+## Da chiedere a Cauriol
+
+Dati che non si possono ricavare dal vecchio sito né dal mockup. Si spunta quando arrivano.
+
+**Servono per pubblicare**
+
+- [ ] **Instagram.** Nel mockup c'è solo il nome ("ASD Cauriol Ziano"): non compare in nessun
+  articolo e non è trovabile online. Dove: pannello → Impostazioni → Dati del sito → Social.
+- [ ] **Confermare la pagina Facebook** `https://www.facebook.com/AsCauriol/` (già inserita): è
+  la pagina "A.S. Cauriol, Ziano di Fiemme", trovata in un articolo del 2018 ("a cura della A.S.
+  Cauriol"); corrisponde al nome del mockup ma il cliente deve confermare che sia quella attiva.
+- [ ] **Telefono dell'associazione.** Non esiste da nessuna parte. Negli articoli compaiono solo
+  numeri di singole persone (es. responsabili dei corsi sui volantini): non vanno usati come
+  telefono della società senza il loro consenso. Dove: Dati del sito → Telefono (oggi vuoto).
+- [ ] **Indirizzo del sito.** `https://www.cauriol.it` è dedotto dall'email `info@cauriol.it`,
+  da confermare. Serve per sitemap e anteprime di condivisione. Dove: Dati del sito → Indirizzo
+  del sito.
+- [ ] **Privacy vera.** Il testo di `src/content/pages/privacy.md` è un segnaposto: va scritta da chi si occupa della privacy dell'associazione.
+- [ ] **Controllo dei nomi del direttivo.** Sul vecchio sito sono scritti "COGNOME NOME" (es.
+  "VANZETTA NICOLA"); nel sito nuovo sono "Nome Cognome". Verificare che non ci siano errori, in
+  particolare per i due Diego (Zorzi e Vanzetta) e per chi ha due ruoli. Dove: `src/content/team/`
+  o pannello → Team.
+
+**Servono per completare il design**
+
+- [ ] **Loghi singoli degli sponsor.** Sul vecchio sito sono 5 collage di circa 50 loghi, non file
+  separati. Per il carosello del mockup servono i file dei singoli loghi, con nome e, se c'è, il
+  sito. Dove: `src/data/sponsors.json` (pannello → Impostazioni → Sponsor) e, per riattivarli,
+  il blocco "Sponsor" nella home.
+
+**Da verificare prima di pubblicare**
+
+- [ ] **Diritti sulle immagini migrate.** Le 140 immagini in `public/uploads/wp/` vengono dal
+  vecchio sito (copertine delle news, foto negli articoli, collage degli sponsor, QR di WhatsApp)
+  e le ho copiate così com'erano, solo ridimensionate. Non ho verificato la proprietà né le
+  liberatorie: alcuni volantini riportano loghi di altri enti, e ci sono foto di persone,
+  compresi minori. Chiedere a Cauriol conferma sui diritti e sulla privacy; eventualmente
+  togliere le immagini dubbie.
+- [ ] **Origine delle immagini nuove.** Le montagne (`cauriol-montagne.svg`,
+  `PageHeaderDecor.astro`, `FooterDecor.astro`) sono disegnate da noi, non il
+  materiale del grafico: se il grafico ha le illustrazioni originali vanno usate al loro posto.
+  Anche la favicon è generata dal codice (colori del tema), non è il logo di Cauriol.
+
+**Contenuti mancanti sul vecchio sito**
+
+- [ ] **Testi di Corsa campestre e Sci alpino**: le pagine sono vuote anche sul vecchio sito e nel
+  nuovo hanno un segnaposto. In pratica la pagina di Corsa campestre non è vuota: mostra da sola
+  le 12 news collegate. Sci alpino no (nessuna news si può attribuire con certezza: i "corsi di
+  sci" sono insieme nordico e alpino, e una news ha una sola disciplina). Così anche Biathlon
+  e Sci nordico non hanno news collegate.
+- [ ] **Immagini delle discipline** (il mockup ne ha una per ciascuna) e foto o contatti delle
+  persone del direttivo: non esistono sul vecchio sito.
+- [ ] **Pagina o modulo per il pulsante "Tesseramento"**: oggi porta a `/contatti`. Confermare se
+  basta o se serve una pagina dedicata.
+- [ ] **Descrizioni brevi delle discipline**: oggi sono frasi neutre scritte a mano ("Il settore
+  orienteering di ASD Cauriol."). Da sostituire con quelle del cliente.
+
 ## Da decidere con il cliente
 
 - **Carosello degli sponsor**: il mockup lo mostra, richiede JavaScript. Nella base è una

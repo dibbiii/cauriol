@@ -11,7 +11,9 @@
   "email": "info@cauriol.it",
   "address": "via Bosin, 2\n38030 Ziano di Fiemme TN",
   "tax_id": "C.F. 91000920222",
-  "socials": [],
+  "socials": [
+    { "platform": "Facebook", "url": "https://www.facebook.com/AsCauriol/" }
+  ],
   "privacy_url": "/privacy",
   "footer_note": "Associazione sportiva dilettantistica · Ziano di Fiemme (TN)",
   "footer_logo": "/uploads/cauriol-logo-white.png",
