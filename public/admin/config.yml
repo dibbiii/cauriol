@@ -7,7 +7,7 @@
 
 backend:
   name: github
-  repo: brainylabs/NOME-REPO-CLIENTE   # <-- da cambiare per ogni cliente
+  repo: dibbiii/cauriol
   branch: main
   # base_url: https://auth.tuodominio.it  # solo se usi un proxy OAuth tuo (vedi README)
 
