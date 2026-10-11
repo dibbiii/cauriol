@@ -1,31 +1,45 @@
 {
-  "name": "ASD Monte Esempio",
-  "tagline": "Sport in montagna per tutte le età",
-  "url": "https://www.esempio.it",
-  "logo": "",
-  "page_header_style": "simple",
-  "email": "info@esempio.it",
-  "phone": "+39 0462 000000",
-  "address": "Via delle Malghe 1\n38033 Cavalese (TN)",
-  "tax_id": "C.F. 00000000000",
-  "socials": [
+  "name": "ASD Cauriol",
+  "tagline": "Lo sport è salute e scuola di vita.",
+  "url": "https://www.cauriol.it",
+  "logo": "/uploads/cauriol-logo.png",
+  "show_name_with_logo": true,
+  "header_subtitle": "ASD · Ziano di Fiemme",
+  "header_button_label": "Tesseramento",
+  "header_button_url": "/contatti",
+  "page_header_style": "band",
+  "email": "info@cauriol.it",
+  "address": "via Bosin, 2\n38030 Ziano di Fiemme TN",
+  "tax_id": "C.F. 91000920222",
+  "socials": [],
+  "privacy_url": "/privacy",
+  "footer_note": "Associazione sportiva dilettantistica · Ziano di Fiemme (TN)",
+  "footer_logo": "/uploads/cauriol-logo-white.png",
+  "footer_columns": [
     {
-      "platform": "Facebook",
-      "url": "https://www.facebook.com/"
+      "title": "La società",
+      "links": [
+        { "label": "La storia", "url": "/la-storia" },
+        { "label": "Il direttivo", "url": "/il-direttivo" },
+        { "label": "Modulistica", "url": "/modulistica" },
+        { "label": "Safeguarding", "url": "/safeguarding" },
+        { "label": "Sponsor", "url": "/sponsor" },
+        { "label": "Vantaggi economici da pubbliche amministrazioni", "url": "/vantaggi-economici" }
+      ]
     },
     {
-      "platform": "Instagram",
-      "url": "https://www.instagram.com/"
+      "title": "Discipline",
+      "from_activities": true
     }
   ],
-  "privacy_url": "/privacy",
-  "footer_note": "Associazione sportiva dilettantistica affiliata FISI.",
-  "activities_label": "Attività",
-  "activities_path": "attivita",
-  "activities_more_title": "Altre attività",
-  "activities_all_label": "Tutte le attività",
-  "news_featured": false,
-  "news_sidebar": false,
-  "show_section_nav": false,
-  "show_share_links": false
+  "activities_label": "Discipline",
+  "activities_path": "discipline",
+  "activities_more_title": "Altre discipline",
+  "activities_all_label": "Tutte le discipline",
+  "news_featured": true,
+  "news_sidebar": true,
+  "news_box_title": "5 x mille",
+  "news_box_text": "Con i proventi del 5x1000 applichiamo agevolazioni alle famiglie che fanno fare sport a più di un figlio/a. Codice fiscale: 91000920222",
+  "show_section_nav": true,
+  "show_share_links": true
 }

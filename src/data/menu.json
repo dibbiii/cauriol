@@ -6,21 +6,41 @@
     },
     {
       "label": "La società",
-      "url": "/la-societa",
+      "url": "/la-storia",
       "children": [
         {
+          "label": "La storia",
+          "url": "/la-storia"
+        },
+        {
           "label": "Il direttivo",
-          "url": "/la-societa#team"
+          "url": "/il-direttivo"
+        },
+        {
+          "label": "Modulistica",
+          "url": "/modulistica"
+        },
+        {
+          "label": "Safeguarding",
+          "url": "/safeguarding"
+        },
+        {
+          "label": "Sponsor",
+          "url": "/sponsor"
+        },
+        {
+          "label": "Vantaggi economici da pubbliche amministrazioni",
+          "url": "/vantaggi-economici"
         }
       ]
     },
     {
-      "label": "Attività",
-      "url": "/attivita",
+      "label": "Discipline",
+      "url": "/discipline",
       "activities_submenu": true
     },
     {
-      "label": "News",
+      "label": "Notizie",
       "url": "/news"
     },
     {
