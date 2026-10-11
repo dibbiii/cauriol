@@ -1,0 +1,6 @@
+# I file caricati non sono testo: niente conversione degli a-capo (rovinerebbe PDF e immagini)
+public/uploads/** binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
