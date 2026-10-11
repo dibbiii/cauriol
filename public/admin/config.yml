@@ -50,7 +50,7 @@ collections:
         fields:
           - { label: Nome del file, name: label, widget: string }
           - { label: File, name: file, widget: file }
-      - label: Attività collegata
+      - label: Disciplina collegata
         name: activity
         widget: relation
         collection: activities
@@ -58,7 +58,7 @@ collections:
         value_field: "{{slug}}"
         display_fields: [title]
         required: false
-        hint: "Facoltativo: la news comparirà anche nella pagina di quell'attività"
+        hint: "Facoltativo: la news comparirà anche nella pagina di quella disciplina"
       - { label: Bozza (non pubblicare), name: draft, widget: boolean, default: false, required: false }
       - { label: Testo, name: body, widget: markdown }
 
@@ -289,8 +289,8 @@ collections:
   #  e, in Impostazioni → Dati del sito, nome e indirizzo della sezione.
   # -----------------------------------------------------------
   - name: activities
-    label: Attività
-    label_singular: Attività
+    label: Discipline
+    label_singular: Disciplina
     folder: src/content/activities
     create: true
     slug: "{{slug}}"
