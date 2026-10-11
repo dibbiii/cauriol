@@ -1,9 +1,9 @@
 {
-  "primary": "#24493d",
-  "accent": "#c62d1f",
-  "ink": "#1b2430",
-  "paper": "#f5f6f3",
-  "heading_font": "barlow",
+  "primary": "#1e3b2f",
+  "accent": "#c2471a",
+  "ink": "#1f2a24",
+  "paper": "#f5f6f2",
+  "heading_font": "source_serif",
   "body_font": "source",
-  "corners": "square"
+  "corners": "soft"
 }
