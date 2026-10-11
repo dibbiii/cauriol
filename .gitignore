@@ -4,3 +4,4 @@ dist/
 public/admin/vendor/
 .env
 .DS_Store
+mockup/
