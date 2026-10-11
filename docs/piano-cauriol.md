@@ -82,11 +82,23 @@ Ciò che serve anche ad altri clienti va fatto nella **base**, non qui.
   qui sono "Nome Cognome"); i 3 box della home e le cifre (1947, 74, 18, 7) sono dal mockup; il
   PDF 2021 dei "Vantaggi economici" non esiste sul vecchio sito.
 
-### 5. Parte solo di Cauriol, in `src/brand/`
-- Montagne e boschi illustrati: `PageHeaderDecor.astro` (dietro la fascia) e
-  `FooterDecor.astro` (sopra il footer); stili in `brand.css`.
-- Tabella gare di Orienteering e sostenitori del Calcio: contenuto di Cauriol. Diventano
-  un blocco della base solo se servono a un secondo cliente.
+### 5. Parte solo di Cauriol, in `src/brand/` — FATTO (illustrazioni)
+- **Montagne e boschi** disegnati in SVG e generati da `scripts/generate-brand-art.cjs`
+  (deterministico: rilanciandolo si ottengono gli stessi file; si possono cambiare forme, colori
+  e densità degli abeti nello script):
+  - scena della home: `public/uploads/cauriol-montagne.svg`, impostata come immagine del blocco
+    hero in `src/content/pages/home.md`;
+  - `src/brand/PageHeaderDecor.astro`: montagne in trasparenza dietro la fascia delle pagine
+    interne (funzionano con qualunque colore primario);
+  - `src/brand/FooterDecor.astro`: sagoma di montagne e abeti sopra il footer, nel colore
+    primario del tema.
+- Su telefono il blocco hero ritaglia l'immagine al centro: si vedono bosco e colline, non le
+  cime innevate a destra. Il testo resta leggibile. Cambiarlo richiederebbe di modificare la base.
+- Il mockup ha anche mini-montagne come immagine segnaposto delle discipline e delle news senza
+  copertina, e un riquadro "La società" con montagne nella home: non fatti. Le discipline non hanno
+  immagini (sul vecchio sito non esistono).
+- Tabella gare di Orienteering e sostenitori del Calcio: contenuto di Cauriol (oggi testo nelle
+  pagine delle discipline). Diventano un blocco della base solo se servono a un secondo cliente.
 
 ### 6. Pubblicazione
 - Deploy su Netlify con una OAuth App di GitHub, poi gli account degli editor (vedi

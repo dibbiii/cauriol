@@ -8,6 +8,7 @@ sections:
     subtitle: "ASD Cauriol: biathlon, calcio, corsa campestre, sci alpinismo, sci alpino, sci nordico e orienteering."
     button_label: "Contatti e tesseramento"
     button_url: /contatti
+    image: /uploads/cauriol-montagne.svg
     size: large
   - type: stats
     layout: row
