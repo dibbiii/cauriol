@@ -19,6 +19,3 @@ Bella serata di sport e amicizia sulle nevi di Castelir a Bellamonte. Più di 80
 
 Speriamo che l’impegno che la Cauriol mette per organizzare eventi di socialità come questo, possano contribuire alla costruzione di relazioni sociali forti, capaci di contrastare i venti di guerra e di odio tra i popoli che stanno soffiando sull’Europa e sul mondo intero. Alla prossima …
 
-* * *
-
-* * *

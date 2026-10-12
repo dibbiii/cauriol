@@ -4,9 +4,7 @@ date: 2017-02-09
 cover: "/uploads/wp/2017/02/3.jpg"
 draft: false
 ---
-> ### “Il racconto di Tiziano Vanzetta … viaggio in Nepal con Mirco Valler” …
-
-* * *
+### “Il racconto di Tiziano Vanzetta … viaggio in Nepal con Mirco Valler” …
 
 A dare la miccia al nostro viaggio è stata la voglia di visitare ed esplorare i luoghi incantati che così tante volte leggevamo sui libri di montagna, raccontati dalle grandi gesta dei migliori alpinisti al mondo.
 
