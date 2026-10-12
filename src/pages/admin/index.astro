@@ -1,5 +1,5 @@
 ---
-// Pannello Decap CMS su /admin.
+// Pannello Sveltia CMS su /admin.
 // È una rotta Astro (e non un public/admin/index.html) perché altrimenti
 // in sviluppo la rotta [...slug].astro intercetterebbe /admin/.
 ---
@@ -10,10 +10,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Gestione contenuti</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
   </head>
   <body>
-    <!-- Decap servito dal nostro dominio, nessuna CDN esterna (vedi scripts/copy-decap.mjs) -->
-    <script is:inline src="/admin/vendor/decap-cms.js"></script>
+    <!-- Sveltia dal pacchetto npm: Astro lo unisce al sito e lo serve dal nostro dominio,
+         nessuna CDN esterna (la versione CDN caricherebbe risorse da unpkg e jsDelivr). -->
+    <script>
+      import { init } from "@sveltia/cms";
+      init();
+    </script>
   </body>
 </html>

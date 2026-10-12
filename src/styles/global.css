@@ -1,4 +1,14 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
+
+/* Tailwind legge solo il codice che usa le classi. Senza queste righe leggerebbe tutti i file
+   del progetto, anche README e guide: ogni parola che somiglia a una sua classe ("fixed",
+   "container", "visible"…) aggiungerebbe CSS inutile a ogni pagina.
+   Se si crea una nuova cartella con classi Tailwind, va aggiunta qui. */
+@source "../components";
+@source "../layouts";
+@source "../pages";
+@source "../lib";
+@source "../brand";
 
 /* I colori e i caratteri arrivano da src/data/theme.json (modificabile dal CMS)
    come variabili CSS iniettate in <head> (vedi themeCss in src/lib/site.ts).

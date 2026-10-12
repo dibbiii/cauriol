@@ -10,5 +10,10 @@ export default defineConfig({
   trailingSlash: 'ignore',
   devToolbar: { enabled: false },
   integrations: [sitemap({ filter: (page) => !page.includes('/admin') })],
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    // Il pannello /admin (Sveltia) è un file da circa 2,3 MB: è normale per un editor completo
+    // e lo scaricano solo gli editor, non i visitatori. Alziamo il limite dell'avviso.
+    build: { chunkSizeWarningLimit: 3000 },
+  },
 });

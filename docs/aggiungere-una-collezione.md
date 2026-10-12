@@ -36,7 +36,7 @@ Se serve solo un elenco semplice dentro una pagina, basta una lista in un blocco
     label: Team
     folder: src/content/team
     create: true
-    slug: "{{slug}}"
+    slug: { template: "{{slug}}", editable: [create] }   # il nome del file si sceglie alla creazione, poi è fisso
     identifier_field: name      # il campo che fa da titolo
     fields:
       - { label: Nome, name: name, widget: string }
@@ -74,16 +74,25 @@ Nel pannello si usa il widget `relation`:
 Regole imparate:
 
 - **Si salva lo `{{slug}}`, cioè il nome del file**, non il nome della persona.
-  Verificato nel codice di Decap (`decap-cms-core/src/backend.ts`): il nome del
-  file viene generato solo alla creazione, quindi **rinominare una persona non
-  rompe i collegamenti**. Verificato anche nel pannello.
+  Con `slug: { …, editable: [create] }` il nome del file si sceglie alla creazione e poi
+  **non cambia più** (verificato nel pannello: nella voce già salvata il pannello «Slug»
+  mostra solo il testo, senza modifica). Quindi **cambiare il nome di una persona non
+  rompe i collegamenti**. Senza `editable`, Sveltia permetterebbe di rinominare il file e
+  riscriverebbe da solo i collegamenti nello stesso commit (da documentazione, non provato):
+  non lo usiamo, perché cambierebbe anche gli indirizzi pubblici.
+- Il nome del file viene creato **senza accenti né simboli** (`slug: { encoding: ascii,
+  clean_accents: true }`): «Niccolò Perché» → `niccolo-perche`. Il testo dentro il file
+  resta com'è.
 - Per questo il Team è una collezione a cartella e non una lista dentro un file:
-  nelle liste non c'è un identificativo stabile (Decap non ha un campo che lo
-  generi da solo).
+  nelle liste non c'è un identificativo stabile che il pannello generi da solo.
 - Nello schema il collegamento è un semplice testo o una lista di testi
   (`z.array(z.string())`).
-- **Persona eliminata**: chi legge il collegamento deve ignorarla e avvisare
-  nel registro della build, senza fermarla (`membersById` in `src/lib/team.ts`).
+- **Persona eliminata dal pannello**: Sveltia la toglie anche dai collegamenti che la
+  citano, nello stesso salvataggio, con una conferma (verificato con il server di sviluppo
+  spento; con il server acceso l'aggiornamento è rimasto a metà una volta: vedi la regola nel
+  README).
+- **Persona eliminata a mano** (file cancellato): chi legge il collegamento deve ignorarla e
+  avvisare nel registro della build, senza fermarla (`membersById` in `src/lib/team.ts`).
   L'editor non vede gli errori di build: un sito che smette di pubblicarsi in
   silenzio è peggio di un nome che sparisce.
 
@@ -100,8 +109,10 @@ Si definisce una volta con un'ancora e si richiama con l'alias:
       - *sections_field        # nella collezione Attività
 ```
 
-Decap legge `config.yml` con la libreria `yaml` e le opzioni `maxAliasCount: -1`
-e `merge: true`: gli alias sono supportati (verificato nel codice e nel pannello).
+Sveltia supporta ancore, alias e chiavi di unione YAML, **ma solo nello stesso file**
+(da documentazione). Verificato nel pannello: il campo «Sezioni» compare sia nelle Pagine
+sia nelle Attività. Non si possono quindi spezzare le collezioni in più file di
+configurazione condividendo un'ancora.
 
 ## 5: una pagina per elemento
 
@@ -142,8 +153,10 @@ senza toccare il codice.
 
 1. `npx astro sync` con file validi e non validi (errore che indica il campo).
 2. `npm run build`: nessun avviso nuovo.
-3. `npm run dev` + `npm run cms`: aprire il pannello, creare un elemento, controllare
-   il file scritto in `src/content/<nome>/`.
-4. Rinominare un elemento dal pannello e controllare che il nome del file resti lo stesso.
-5. Provare gli stati limite: elemento senza campi facoltativi, collegamento a un
-   elemento eliminato, nessun elemento.
+3. Aprire il pannello (`/admin`, in Chrome o Edge, «Lavora con Repository Locale»),
+   **fermare `npm run dev`** prima di salvare, creare un elemento e controllare il file scritto
+   in `src/content/<nome>/` con `git status` e `git diff` (nessun file vuoto né
+   `.sveltia-tmp-*`).
+4. Cambiare il nome di un elemento e controllare che il nome del file resti lo stesso.
+5. Provare gli stati limite: elemento senza campi facoltativi, eliminare un elemento
+   collegato (il collegamento deve sparire dalle altre voci), nessun elemento.

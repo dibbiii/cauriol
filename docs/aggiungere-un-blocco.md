@@ -92,24 +92,31 @@ const map = { ..., cta: Cta, stats: Stats, documents: Documents, ... } as const;
 - Il rientro con **spazi** è la struttura. Mai usare Tab. Le voci di
   `types` hanno 10 spazi davanti a `- label:`.
 
-**Limiti uguali in Decap e nello schema**
+**Limiti uguali nel pannello e nello schema**
 - `min: 2` / `max: 4` in `config.yml` e `.min(2).max(4)` in Zod devono
   coincidere, altrimenti l'editor può salvare qualcosa che la build rifiuta.
-- In Decap il pulsante "Aggiungi" **non si ferma** al massimo: il limite scatta
-  al salvataggio, con il messaggio "Numeri deve avere tra 2 e 4 elementi".
+- Con Decap il pulsante "Aggiungi" **non si fermava** al massimo: il limite scattava
+  al salvataggio, con il messaggio "Numeri deve avere tra 2 e 4 elementi". Con Sveltia
+  questo comportamento **non è stato verificato**: provarlo quando si aggiunge un blocco
+  con limiti.
 
 **Numeri come testo**
 - `value` è `z.string()`, non un numero: serve per valori come `07` o `120 km`.
-- Decap mette le virgolette da solo. Scrivendo un `.md` **a mano** vanno messe:
-  `value: "1947"`. Senza, YAML lo legge come numero e la build si ferma.
+- Il pannello mette le virgolette da solo (Sveltia, da documentazione, quota sempre i
+  testi che YAML leggerebbe come numeri o booleani). Scrivendo un `.md` **a mano** vanno
+  messe: `value: "1947"`. Senza, YAML lo legge come numero e la build si ferma.
 
 **Valori predefiniti**
 - Un campo nuovo in un blocco esistente deve avere un valore predefinito
   (`.default('row')`), così le pagine già create continuano a funzionare.
-- Il `default:` di `config.yml` vale **solo per elementi nuovi** (un blocco appena
-  aggiunto). Per un'impostazione in un file che esiste già (`src/data/*.json`)
-  il pannello mostrerebbe il campo vuoto: scrivi il valore anche nel file
-  (es. `"page_header_style": "simple"` in `site.json`).
+- Il `default:` di `config.yml` vale per gli elementi nuovi. Con Sveltia, quando si apre
+  e si salva un elemento **già esistente**, i campi che mancano nel file vengono scritti
+  con il loro valore predefinito (osservato: `layout: grid`, `sort: entered`,
+  `show_open: false`). Per un'impostazione in un file che esiste già (`src/data/*.json`)
+  conviene comunque scrivere il valore anche nel file
+  (es. `"page_header_style": "simple"` in `site.json`): il sito legge il file, non il pannello.
+- Nei file si scrivono solo i campi compilati (`output.omit_empty_optional_fields`):
+  un campo facoltativo lasciato vuoto non compare.
 
 **Tailwind**
 - Una classe scritta male **non dà errore**: viene ignorata. Va sempre
@@ -144,13 +151,17 @@ const map = { ..., cta: Cta, stats: Stats, documents: Documents, ... } as const;
 Se in sviluppo l'aspetto non corrisponde a quello della build, **riavvia
 `npm run dev`**: può restare in cache una versione vecchia dei contenuti.
 
+Per provare il **modulo** nel pannello, apri `/admin` in Chrome o Edge
+(«Lavora con Repository Locale») e ricorda la regola del README: **ferma `npm run dev`
+prima di salvare**, poi controlla con `git status` e `git diff`.
+
 ## Cosa succede se manca un file
 
 Provato togliendo un file alla volta, con una pagina che usa il blocco:
 
 | Manca | Effetto |
 |---|---|
-| 1 (`config.yml`) | L'editor non vede il blocco nel pannello (la build non se ne accorge: lo legge solo Decap) |
+| 1 (`config.yml`) | L'editor non vede il blocco nel pannello (la build non se ne accorge: lo legge solo il pannello) |
 | 2 (schema) | La build si ferma: `InvalidContentEntryDataError ... data does not match collection schema` |
 | 3 (componente) | La build si ferma: `Could not resolve './blocks/Nome.astro'` |
 | 4 (`Blocks.astro`) | La build si ferma: `Unable to render Component because it is undefined!` |
@@ -162,7 +173,7 @@ Quindi, dei 4 file, solo il primo può essere dimenticato senza accorgersene
 
 - [ ] `type` uguale nei file 1, 2 e 4 (`stats`)
 - [ ] Campi, obbligatori e facoltativi, uguali nei file 1 e 2
-- [ ] Limiti (`min`/`max`) uguali in Decap e in Zod
+- [ ] Limiti (`min`/`max`) uguali nel pannello e in Zod
 - [ ] Valori predefiniti per i campi nuovi
 - [ ] Provato con `npx astro sync` (caso corretto e casi sbagliati)
 - [ ] Provato nel browser: desktop e mobile

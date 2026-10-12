@@ -1,4 +1,4 @@
-# Brainy Starter — Astro + Decap CMS
+# Brainy Starter — Astro + Sveltia CMS
 
 Base riutilizzabile per siti statici di associazioni, eventi e piccole aziende.
 Il cliente aggiorna news, pagine, team e sponsor da `/admin`; ogni modifica
@@ -7,13 +7,32 @@ diventa un commit su Git e il sito si ricostruisce da solo.
 ## Avvio in locale
 
 ```bash
-npm install          # installa e copia Decap in public/admin/vendor
-npm run dev          # terminale 1 → http://localhost:4321
-npm run cms          # terminale 2 → abilita il pannello in locale
+npm install          # installa le dipendenze
+npm run dev          # → http://localhost:4321
 ```
 
-Apri `http://localhost:4321/admin/` e clicca **Accedi**: in locale non serve
-password, le modifiche vengono scritte direttamente nei file del progetto.
+Il pannello **non ha un server a parte**. Si apre `http://localhost:4321/admin/` in
+**Chrome o Edge** (Firefox e Safari non funzionano in questa modalità), si clicca
+**Lavora con Repository Locale** e si sceglie la cartella del progetto (quella che contiene
+`.git`). Da lì le modifiche vengono scritte direttamente nei file, senza password. Il
+pannello **non fa commit**: si controllano con `git diff` e si committano a mano. Dopo un
+`git pull` o una modifica a `config.yml` si ricarica la pagina.
+
+**Regola per chi lavora in locale (verificata su Windows):** il server di sviluppo osserva i
+file e può interferire con il modo in cui il pannello li sostituisce. Nelle prove sono comparsi
+un file rimasto vuoto e un'eliminazione rimasta a metà (un file `.sveltia-tmp-…` lasciato nella
+cartella). Per questo, **quando si salva o si elimina dal pannello conviene fermare
+`npm run dev`**: il pannello già aperto continua a funzionare. Dopo ogni sessione:
+
+```bash
+git status     # nessun file vuoto e nessun file .sveltia-tmp-*
+git diff       # controlla cosa è cambiato
+```
+
+Se un file risulta vuoto o c'è un `.sveltia-tmp-*`: `git restore percorso/del/file` e si
+riprova. Un file vuoto non arriva online: la build si ferma e indica quale. Il problema non
+esiste per gli editor online, perché con GitHub ogni salvataggio è un commit scritto in un
+solo colpo.
 
 ## Come è organizzato
 
@@ -33,6 +52,10 @@ public/uploads/             ← immagini e file caricati dal pannello
 La regola d'oro: **config.yml e content.config.ts devono descrivere gli stessi
 campi.** Se ne cambi uno, cambia l'altro. Se non coincidono, la build si ferma
 e l'errore indica il campo.
+
+**Nomi dei file e indirizzi:** il pannello li crea senza accenti né simboli («Perché è così»
+→ `perche-e-cosi`; il testo dentro il file resta com'è) e dopo la creazione l'indirizzo non
+si cambia più. Nei file salva solo i campi compilati.
 
 ## Blocchi disponibili
 
@@ -57,6 +80,24 @@ Guida dettagliata, con un esempio completo e i controlli da fare:
 [`docs/aggiungere-un-blocco.md`](docs/aggiungere-un-blocco.md).
 
 Se il blocco può servire ad altri clienti, aggiungilo **qui nella base**.
+
+## Il testo scritto nel pannello (Markdown)
+
+L'editor di testo del pannello salva bene titoli, elenchi, citazioni, immagini, link, grassetto e
+corsivo. **Due costrutti vengono riscritti in modo diverso quando una voce che li contiene è
+modificata e salvata** (verificato riproducendo il salvataggio di 120 voci di un sito reale):
+
+- le **linee orizzontali** (`---`, `* * *`) diventano un elenco con asterischi letterali;
+- un **titolo dentro una citazione** (`> ### Titolo`) perde il titolo e mostra i simboli `###`.
+
+Per questo i contenuti scritti a mano o importati vanno senza questi due costrutti: per separare le
+sezioni si usano i titoli. Sveltia non elenca tra la sintassi supportata nemmeno le tabelle (e non
+è stato provato cosa succede con l'HTML scritto nel testo): meglio evitarli.
+
+Altre riscritture sono invece innocue, e compaiono al primo salvataggio: `*corsivo*` diventa
+`_corsivo_`, `***x***` diventa `**_x_**`, `**[testo](url)**` diventa `[**testo**](url)`. Il testo si
+vede identico. Un campo viene riscritto **solo se lo si modifica**: cambiare soltanto il titolo di
+una news non tocca il suo testo.
 
 ## Personalizzare un cliente: `src/brand/`
 
@@ -88,8 +129,10 @@ Per un cliente si adatta così:
 4. Aggiungi la voce al menu
 
 I responsabili si scelgono dal Team. Il collegamento usa il nome del *file* della
-persona: se la rinomini continua a funzionare; se la elimini sparisce dai
-responsabili (con un avviso nel registro della build, senza fermarla).
+persona: se ne cambi il nome continua a funzionare. Se elimini una persona dal pannello,
+Sveltia la toglie da solo dai responsabili (con una conferma). Se invece il file viene
+cancellato a mano, sparisce dai responsabili con un avviso nel registro della build, senza
+fermarla.
 Una news si collega a un'attività dal campo *Attività collegata*.
 
 Guida per chi sviluppa: [`docs/aggiungere-una-collezione.md`](docs/aggiungere-una-collezione.md).
@@ -108,7 +151,7 @@ Guida per chi sviluppa: [`docs/aggiungere-una-collezione.md`](docs/aggiungere-un
    git push -u origin main
    ```
 2. `public/admin/config.yml` → `backend.repo: brainylabs/nome-cliente`
-3. `npm install && npm run dev && npm run cms`
+3. `npm install && npm run dev`, poi apri `/admin` (vedi «Avvio in locale»)
 4. Dal pannello, **Impostazioni**:
    - *Dati del sito*: nome, URL, contatti, social
    - *Aspetto*: colori, caratteri, angoli
@@ -138,13 +181,23 @@ andare su qualunque hosting. Il punto delicato è **il login al pannello**.
 4. Ogni editor accede con il proprio account GitHub, che deve avere
    accesso in scrittura al repository
 
-Netlify Identity e Git Gateway sono in dismissione: non usarli.
+Netlify Identity e Git Gateway non sono supportati da Sveltia (e Netlify li sta
+dismettendo): non usarli.
+
+**Il pulsante «Accedi con GitHub» funziona solo sul sito pubblicato.** Usa il servizio di
+Netlify, che accetta soltanto siti registrati: su `localhost` non può funzionare. Per
+provare l'accesso online senza OAuth c'è **«Accedi con Token di Accesso»**: un token
+*fine-grained* di GitHub limitato al repository, con permesso *Contents: Read and write*,
+incollato nel pannello (mai in un file né in chat). Va usato su un **repository di prova**:
+ogni salvataggio è un commit. Per i clienti in produzione si può togliere questa possibilità
+con `auth_methods: [oauth]` sotto `backend` in `config.yml`.
 
 ### Altri hosting (Cloudflare Pages, hosting europeo, server proprio)
 
-Serve un piccolo servizio OAuth intermedio tra Decap e GitHub, per esempio
-un Cloudflare Worker o una funzione serverless. Una volta attivo, aggiungi
-in `config.yml`:
+Serve un piccolo servizio OAuth intermedio tra il pannello e GitHub. Quello ufficiale di
+Sveltia è il **Sveltia CMS Authenticator**, un Cloudflare Worker; esistono anche client
+«compatibili con Decap» di terzi, ma Sveltia non ne garantisce il funzionamento. Una volta
+attivo, aggiungi in `config.yml`:
 
 ```yaml
 backend:
@@ -155,10 +208,27 @@ backend:
 
 Un unico proxy può servire tutti i clienti.
 
+## Chi può modificare dal pannello
+
+Il pannello non ha utenti propri: l'accesso lo decide **GitHub**.
+
+- Può accedere e salvare chi ha **accesso in scrittura** al repository (collaboratore, o
+  membro di un team dell'organizzazione). Chi ha solo lettura **non riesce nemmeno ad
+  accedere**. Ogni editor ha bisogno di un account GitHub.
+- **Non si possono dare permessi diversi per collezione**: chi entra vede e modifica tutto.
+- Per far **approvare** le modifiche si può attivare `publish_mode: editorial_workflow` in
+  `config.yml` (non attivo di base): ogni modifica diventa una *pull request* che qualcuno
+  deve pubblicare. Con la **protezione del ramo `main`** su GitHub si decide chi può unirla.
+- Senza flusso editoriale e con `main` protetto, chi non può scrivere su `main` vede il
+  pannello in sola lettura.
+
 ## GDPR: cosa fa già la base
 
 - **Caratteri self-hosted** (Fontsource): nessuna richiesta a Google Fonts
-- **Decap servito dal nostro dominio**, non da CDN esterne
+- **Pannello servito dal nostro dominio**: Sveltia arriva dal pacchetto npm e non dalla
+  versione CDN, che caricherebbe risorse da unpkg e jsDelivr. Il pannello parla solo con
+  GitHub e col servizio OAuth; prima del login controlla lo stato di GitHub
+  (`githubstatus.com`, un servizio di GitHub)
 - **Nessun cookie** e nessuno strumento di analisi
 - **Video YouTube a due clic**: nulla viene caricato da YouTube finché
   il visitatore non lo chiede, poi si usa `youtube-nocookie.com`
@@ -196,8 +266,10 @@ cliente l'informativa va verificata da chi se ne occupa.
   esbuild l'avviso `allow-scripts` ricompare: si riapprova con `npm approve-scripts esbuild`
   (`npm approve-scripts --allow-scripts-pending` elenca cosa manca)
 - `npm outdated` / `npm update` una volta ogni qualche mese
-- Le versioni di Decap sono fissate in `package.json` (nessun
-  aggiornamento automatico da CDN che possa rompere il pannello)
+- **Sveltia CMS è ancora in beta** (modifiche incompatibili possibili prima della 1.0, prevista
+  senza garanzie per fine 2026). La versione è fissata in `package.json` senza `^` e si
+  aggiorna a mano, dopo aver letto le note di rilascio: aprire i moduli, salvare una voce di
+  ogni tipo e controllare `git diff` e `npm run build`
 - Per portare un miglioramento della base in un sito cliente già
   esistente (il remote `base` c'è già se il sito è stato creato con la
   checklist sopra):
@@ -208,9 +280,9 @@ cliente l'informativa va verificata da chi se ne occupa.
   Se il remote `base` non esiste (sito creato in altro modo), aggiungilo prima
   con `git remote add base https://github.com/brainylabs/brainy-starter.git`.
 
-### Piano B se Decap venisse abbandonato
+### Piano B: tornare a Decap
 
-Sveltia CMS legge lo stesso `config.yml` di Decap. In quel caso basta
-sostituire lo script in `src/pages/admin/index.astro`; contenuti, schema e
-sito non cambiano. È il vantaggio di un CMS basato su file: i contenuti
-sono Markdown e JSON, non sono prigionieri di nessun software.
+La base è nata con Decap CMS. Se Sveltia desse problemi, il tag Git `decap-final` conserva
+l'ultima versione con Decap. Contenuti, schema e sito non cambiano, e `config.yml` si legge
+con entrambi i programmi (con piccole differenze di opzioni). È il vantaggio di un CMS basato
+su file: i contenuti sono Markdown e JSON, non sono prigionieri di nessun software.

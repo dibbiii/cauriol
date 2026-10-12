@@ -5,7 +5,8 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-// Decap salva i campi vuoti come "" oppure null: li trattiamo come assenti.
+// Il pannello salva i campi vuoti come "" oppure null (e con `omit_empty_optional_fields` li
+// omette): li trattiamo come assenti. Vale anche per i file scritti a mano.
 const optStr = z.string().nullish().transform((v) => v || undefined);
 
 const news = defineCollection({

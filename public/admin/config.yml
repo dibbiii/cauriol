@@ -1,5 +1,5 @@
 # =============================================================
-#  Configurazione Decap CMS — Brainy Starter
+#  Configurazione Sveltia CMS — Brainy Starter
 #  Per un nuovo cliente cambia SOLO la sezione "backend".
 #  Ogni campo qui sotto ha un gemello in src/content.config.ts
 #  o in src/lib/site.ts: se ne modifichi uno, modifica l'altro.
@@ -11,16 +11,28 @@ backend:
   branch: main
   # base_url: https://auth.tuodominio.it  # solo se usi un proxy OAuth tuo (vedi README)
 
-# In locale (npm run cms) scrive direttamente sul disco, senza login
-local_backend: true
+# In locale non serve nessun server: si apre /admin in Chrome o Edge e si sceglie
+# "Work with Local Repository" (vedi README).
 
-locale: it
-site_url: /
 display_url: /
-logo_url: /favicon.svg
+logo:
+  src: /favicon.svg
 
-media_folder: public/uploads
+media_folder: /public/uploads
 public_folder: /uploads
+media_libraries:
+  default:
+    config:
+      slugify_filename: true   # ripulisce i nomi dei file caricati (spazi, maiuscole, accenti)
+
+# Nomi dei file e indirizzi delle pagine: senza accenti né simboli (è → e, à → a)
+slug:
+  encoding: ascii
+  clean_accents: true
+
+# Nei file si scrivono solo i campi compilati: niente "cover: ''" o "attachments: []"
+output:
+  omit_empty_optional_fields: true
 
 collections:
   # -----------------------------------------------------------
@@ -31,14 +43,14 @@ collections:
     label_singular: News
     folder: src/content/news
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: { template: "{{year}}-{{month}}-{{day}}-{{slug}}", editable: [create] }
     summary: "{{title}} — {{date | date('DD/MM/YYYY')}}"
     sortable_fields: [date, title]
     view_filters:
       - { label: Bozze, field: draft, pattern: true }
     fields:
       - { label: Titolo, name: title, widget: string }
-      - { label: Data, name: date, widget: datetime, default: "{{now}}", format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false }
+      - { label: Data, name: date, widget: datetime, type: date, default: "{{now}}" }
       - { label: Sommario, name: excerpt, widget: text, hint: "Due righe che compaiono nell'elenco news e nei motori di ricerca" }
       - { label: Immagine o locandina, name: cover, widget: image, required: false }
       - { label: Testo alternativo immagine, name: cover_alt, widget: string, required: false, hint: "Descrivi l'immagine per chi non la vede" }
@@ -70,7 +82,7 @@ collections:
     label_singular: Pagina
     folder: src/content/pages
     create: true
-    slug: "{{slug}}"
+    slug: { template: "{{slug}}", editable: [create] }   # l'indirizzo si sceglie alla creazione e poi resta fisso
     identifier_field: title
     editor: { preview: false }
     summary: "{{title}}  (/{{slug}})"
@@ -293,7 +305,7 @@ collections:
     label_singular: Disciplina
     folder: src/content/activities
     create: true
-    slug: "{{slug}}"
+    slug: { template: "{{slug}}", editable: [create] }
     identifier_field: title
     editor: { preview: false }
     summary: "{{title}}"
@@ -325,7 +337,7 @@ collections:
     label_singular: Persona
     folder: src/content/team
     create: true
-    slug: "{{slug}}"
+    slug: { template: "{{slug}}", editable: [create] }
     identifier_field: name
     editor: { preview: false }
     summary: "{{name}} — {{role}}"
