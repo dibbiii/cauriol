@@ -153,6 +153,10 @@ td.addRule('rows', {
   },
 });
 td.addRule('dropEmbedsAndStyle', { filter: ['style', 'script', 'object', 'iframe', 'meta'], replacement: () => '' });
+// Il pannello (Sveltia) non sa rappresentare le linee orizzontali: salvando una voce che ne
+// contiene una la riscriverebbe come elenco con asterischi letterali. Sono solo separatori di
+// WordPress, quindi si tolgono (lasciando una riga vuota).
+td.addRule('noHorizontalRules', { filter: 'hr', replacement: () => '\n\n' });
 
 // Estrae i blocchi "File" di WordPress (pulsante Scarica) come allegati e li toglie dal testo.
 function takeAttachments(html) {
@@ -168,8 +172,10 @@ function takeAttachments(html) {
   return { html: out, attachments };
 }
 
+// Stesso motivo per un titolo dentro una citazione ("> ### Titolo"): il pannello lo riscriverebbe
+// con il simbolo del titolo letterale ("> \### Titolo"). Il titolo si porta fuori dalla citazione.
 const toMarkdown = (html) =>
-  td.turndown(html).replace(/\n{3,}/g, '\n\n').replace(/^\s*(?:&nbsp;| )\s*$/gm, '').trim();
+  td.turndown(html).replace(/^> (#{1,6} )/gm, '$1').replace(/\n{3,}/g, '\n\n').replace(/^\s*(?:&nbsp;| )\s*$/gm, '').trim();
 
 // ---------- News ----------
 const titleOf = (p) => stripTags(p.title.rendered) || `Articolo ${p.id}`;
