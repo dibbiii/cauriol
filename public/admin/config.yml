@@ -51,7 +51,7 @@ collections:
     fields:
       - { label: Titolo, name: title, widget: string }
       - { label: Data, name: date, widget: datetime, type: date, default: "{{now}}" }
-      - { label: Sommario, name: excerpt, widget: text, hint: "Due righe che compaiono nell'elenco news e nei motori di ricerca" }
+      - { label: Sommario, name: excerpt, widget: text, required: false, hint: "Due righe che compaiono nell'elenco news e nei motori di ricerca" }
       - { label: Immagine o locandina, name: cover, widget: image, required: false }
       - { label: Testo alternativo immagine, name: cover_alt, widget: string, required: false, hint: "Descrivi l'immagine per chi non la vede" }
       - label: Allegati
