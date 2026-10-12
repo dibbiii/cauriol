@@ -95,10 +95,10 @@ const map = { ..., cta: Cta, stats: Stats, documents: Documents, ... } as const;
 **Limiti uguali nel pannello e nello schema**
 - `min: 2` / `max: 4` in `config.yml` e `.min(2).max(4)` in Zod devono
   coincidere, altrimenti l'editor può salvare qualcosa che la build rifiuta.
-- Con Decap il pulsante "Aggiungi" **non si fermava** al massimo: il limite scattava
-  al salvataggio, con il messaggio "Numeri deve avere tra 2 e 4 elementi". Con Sveltia
-  questo comportamento **non è stato verificato**: provarlo quando si aggiunge un blocco
-  con limiti.
+- Il pulsante "Aggiungi" potrebbe **non fermarsi** al massimo, e il limite scattare solo
+  al salvataggio, con un messaggio tipo "Numeri deve avere tra 2 e 4 elementi". Questo
+  comportamento **non è stato verificato** con Sveltia: provarlo quando si aggiunge un
+  blocco con limiti.
 
 **Numeri come testo**
 - `value` è `z.string()`, non un numero: serve per valori come `07` o `120 km`.

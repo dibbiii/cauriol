@@ -18,11 +18,22 @@ Il pannello **non ha un server a parte**. Si apre `http://localhost:4321/admin/`
 pannello **non fa commit**: si controllano con `git diff` e si committano a mano. Dopo un
 `git pull` o una modifica a `config.yml` si ricarica la pagina.
 
-**Regola per chi lavora in locale (verificata su Windows):** il server di sviluppo osserva i
-file e può interferire con il modo in cui il pannello li sostituisce. Nelle prove sono comparsi
-un file rimasto vuoto e un'eliminazione rimasta a metà (un file `.sveltia-tmp-…` lasciato nella
-cartella). Per questo, **quando si salva o si elimina dal pannello conviene fermare
-`npm run dev`**: il pannello già aperto continua a funzionare. Dopo ogni sessione:
+**Regola per chi lavora in locale (osservata su Windows):** il server di sviluppo osserva i
+file e, a volte, può interferire con il modo in cui il pannello li sostituisce. Nelle prove è
+successo due volte su molte operazioni: un file rimasto vuoto dopo una serie rapida di
+salvataggi e un'eliminazione rimasta a metà (un file `.sveltia-tmp-…` lasciato nella cartella).
+È un problema noto a Sveltia e segnalato ([#1061](https://github.com/sveltia/sveltia-cms/issues/1061)).
+Nel frattempo:
+
+- **Un salvataggio alla volta:** si può lasciare `npm run dev` acceso. Dopo la sessione si
+  controlla (vedi sotto).
+- **Eliminare** una persona o una disciplina collegata ad altre voci, o **salvare tante voci di
+  fila:** prima si ferma `npm run dev` (il pannello già aperto continua a funzionare).
+- **Sessioni lunghe di modifica:** al posto di `npm run dev` si usa `npm run build` e poi
+  `npm run preview`. L'anteprima serve file già costruiti e non osserva nulla, quindi non può
+  interferire. Dopo le modifiche si ripete `npm run build` per vedere il risultato.
+
+Dopo ogni sessione:
 
 ```bash
 git status     # nessun file vuoto e nessun file .sveltia-tmp-*
@@ -195,9 +206,8 @@ con `auth_methods: [oauth]` sotto `backend` in `config.yml`.
 ### Altri hosting (Cloudflare Pages, hosting europeo, server proprio)
 
 Serve un piccolo servizio OAuth intermedio tra il pannello e GitHub. Quello ufficiale di
-Sveltia è il **Sveltia CMS Authenticator**, un Cloudflare Worker; esistono anche client
-«compatibili con Decap» di terzi, ma Sveltia non ne garantisce il funzionamento. Una volta
-attivo, aggiungi in `config.yml`:
+Sveltia è il **Sveltia CMS Authenticator**, un Cloudflare Worker. Una volta attivo,
+aggiungi in `config.yml`:
 
 ```yaml
 backend:
@@ -282,7 +292,7 @@ cliente l'informativa va verificata da chi se ne occupa.
 
 ### Piano B: tornare a Decap
 
-La base è nata con Decap CMS. Se Sveltia desse problemi, il tag Git `decap-final` conserva
-l'ultima versione con Decap. Contenuti, schema e sito non cambiano, e `config.yml` si legge
+Prima di Sveltia la base usava Decap CMS. Se Sveltia desse problemi, il tag Git `decap-final`
+conserva l'ultima versione con Decap. Contenuti, schema e sito non cambiano, e `config.yml` si legge
 con entrambi i programmi (con piccole differenze di opzioni). È il vantaggio di un CMS basato
 su file: i contenuti sono Markdown e JSON, non sono prigionieri di nessun software.
