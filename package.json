@@ -8,7 +8,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "admin:copia": "node scripts/copy-sveltia.mjs",
+    "postinstall": "node scripts/copy-sveltia.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "esbuild": "0.28.2",
     "turndown": "^7.2.4",
     "typescript": "^6.0.3"
   },

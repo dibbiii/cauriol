@@ -11,29 +11,16 @@ npm install          # installa le dipendenze
 npm run dev          # → http://localhost:4321
 ```
 
-Il pannello **non ha un server a parte**. Si apre `http://localhost:4321/admin/` in
-**Chrome o Edge** (Firefox e Safari non funzionano in questa modalità), si clicca
-**Lavora con Repository Locale** e si sceglie la cartella del progetto (quella che contiene
-`.git`). Da lì le modifiche vengono scritte direttamente nei file, senza password. Il
-pannello **non fa commit**: si controllano con `git diff` e si committano a mano. Dopo un
-`git pull` o una modifica a `config.yml` si ricarica la pagina.
+Il pannello **non ha un server a parte**. Con `npm run dev` acceso si apre
+`http://localhost:4321/admin/index.html` (in sviluppo serve l'indirizzo completo, con
+`index.html`; online basta `/admin/`) in **Chrome o Edge** (Firefox e Safari non funzionano
+in questa modalità), si clicca **Lavora con Repository Locale** e si sceglie la cartella del
+progetto (quella che contiene `.git`). Da lì le modifiche vengono scritte direttamente nei
+file, senza password. Il pannello **non fa commit**: si controllano con `git diff` e si
+committano a mano. Dopo un `git pull` o una modifica a `config.yml` si ricarica la pagina.
 
-**Regola per chi lavora in locale (osservata su Windows):** il server di sviluppo osserva i
-file e, a volte, può interferire con il modo in cui il pannello li sostituisce. Nelle prove è
-successo due volte su molte operazioni: un file rimasto vuoto dopo una serie rapida di
-salvataggi e un'eliminazione rimasta a metà (un file `.sveltia-tmp-…` lasciato nella cartella).
-È un problema noto a Sveltia e segnalato ([#1061](https://github.com/sveltia/sveltia-cms/issues/1061)).
-Nel frattempo:
-
-- **Un salvataggio alla volta:** si può lasciare `npm run dev` acceso. Dopo la sessione si
-  controlla (vedi sotto).
-- **Eliminare** una persona o una disciplina collegata ad altre voci, o **salvare tante voci di
-  fila:** prima si ferma `npm run dev` (il pannello già aperto continua a funzionare).
-- **Sessioni lunghe di modifica:** al posto di `npm run dev` si usa `npm run build` e poi
-  `npm run preview`. L'anteprima serve file già costruiti e non osserva nulla, quindi non può
-  interferire. Dopo le modifiche si ripete `npm run build` per vedere il risultato.
-
-Dopo ogni sessione:
+Si può lasciare `npm run dev` acceso mentre si salva: il sito si aggiorna da solo. Dopo ogni
+sessione conviene controllare:
 
 ```bash
 git status     # nessun file vuoto e nessun file .sveltia-tmp-*
@@ -45,10 +32,26 @@ riprova. Un file vuoto non arriva online: la build si ferma e indica quale. Il p
 esiste per gli editor online, perché con GitHub ogni salvataggio è un commit scritto in un
 solo colpo.
 
+**Perché la pagina del pannello è un file statico.** `public/admin/index.html` non passa da
+Astro, per scelta. Una pagina dentro `src/pages/` verrebbe **ricaricata dal server di
+sviluppo a ogni modifica dei file** (cambio di Impostazioni, nuovo contenuto), interrompendo
+il pannello mentre sta ancora scrivendo: in prova ha lasciato un file vuoto e
+un'eliminazione a metà (un file `.sveltia-tmp-…`). Lo sconsiglia anche la documentazione di
+Sveltia (sezione Troubleshooting del lavoro in locale). **Non spostare il pannello in
+`src/pages/`.** Con la pagina statica, nella nostra prova, lo stesso insieme di operazioni
+(serie di salvataggi, Impostazioni, creazione ed eliminazione a cascata) è andato senza
+problemi; è una prova su una sessione, non una garanzia.
+
+Sveltia viene copiato da `node_modules` in `public/admin/vendor/` (cartella non
+versionata) dallo script `scripts/copy-sveltia.mjs`. Parte da solo dopo `npm install`
+(`postinstall`); se la cartella manca o dopo un aggiornamento: `npm run admin:copia`.
+
 ## Come è organizzato
 
 ```
 public/admin/config.yml     ← definizione del pannello (campi, blocchi)
+public/admin/index.html     ← pagina del pannello (statica: non spostarla in src/pages)
+public/admin/vendor/        ← Sveltia copiato da npm (generato, non in Git)
 src/content.config.ts       ← schema dei contenuti (il "gemello" di config.yml)
 src/content/news/*.md       ← una news per file
 src/content/pages/*.md      ← una pagina per file, composta da blocchi
@@ -162,7 +165,7 @@ Guida per chi sviluppa: [`docs/aggiungere-una-collezione.md`](docs/aggiungere-un
    git push -u origin main
    ```
 2. `public/admin/config.yml` → `backend.repo: brainylabs/nome-cliente`
-3. `npm install && npm run dev`, poi apri `/admin` (vedi «Avvio in locale»)
+3. `npm install && npm run dev`, poi apri `/admin/index.html` (vedi «Avvio in locale»)
 4. Dal pannello, **Impostazioni**:
    - *Dati del sito*: nome, URL, contatti, social
    - *Aspetto*: colori, caratteri, angoli
@@ -235,10 +238,10 @@ Il pannello non ha utenti propri: l'accesso lo decide **GitHub**.
 ## GDPR: cosa fa già la base
 
 - **Caratteri self-hosted** (Fontsource): nessuna richiesta a Google Fonts
-- **Pannello servito dal nostro dominio**: Sveltia arriva dal pacchetto npm e non dalla
-  versione CDN, che caricherebbe risorse da unpkg e jsDelivr. Il pannello parla solo con
-  GitHub e col servizio OAuth; prima del login controlla lo stato di GitHub
-  (`githubstatus.com`, un servizio di GitHub)
+- **Pannello servito dal nostro dominio**: Sveltia arriva dal pacchetto npm (copiato in
+  `public/admin/vendor/`) e non dalla versione CDN, che caricherebbe risorse da unpkg e
+  jsDelivr. Il pannello parla solo con GitHub e col servizio OAuth; prima del login
+  controlla lo stato di GitHub (`githubstatus.com`, un servizio di GitHub)
 - **Nessun cookie** e nessuno strumento di analisi
 - **Video YouTube a due clic**: nulla viene caricato da YouTube finché
   il visitatore non lo chiede, poi si usa `youtube-nocookie.com`
@@ -278,8 +281,13 @@ cliente l'informativa va verificata da chi se ne occupa.
 - `npm outdated` / `npm update` una volta ogni qualche mese
 - **Sveltia CMS è ancora in beta** (modifiche incompatibili possibili prima della 1.0, prevista
   senza garanzie per fine 2026). La versione è fissata in `package.json` senza `^` e si
-  aggiorna a mano, dopo aver letto le note di rilascio: aprire i moduli, salvare una voce di
-  ogni tipo e controllare `git diff` e `npm run build`
+  aggiorna a mano, dopo aver letto le note di rilascio: `npm install` (rigenera
+  `public/admin/vendor/`), poi aprire `/admin/index.html`, controllare che l'interfaccia sia
+  in italiano, che la console del browser non mostri errori e che nella scheda Rete non ci
+  siano richieste a terzi oltre a `githubstatus.com`; aprire i moduli, salvare una voce di
+  ogni tipo e controllare `git diff` e `npm run build`. Lo script `copy-sveltia.mjs` usa
+  esbuild perché il pacchetto importa le lingue come moduli JSON: se un aggiornamento cambia
+  la struttura del pacchetto può servire adattarlo
 - Per portare un miglioramento della base in un sito cliente già
   esistente (il remote `base` c'è già se il sito è stato creato con la
   checklist sopra):

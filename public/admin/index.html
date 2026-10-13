@@ -1,8 +1,3 @@
----
-// Pannello Sveltia CMS su /admin.
-// È una rotta Astro (e non un public/admin/index.html) perché altrimenti
-// in sviluppo la rotta [...slug].astro intercetterebbe /admin/.
----
 <!doctype html>
 <html lang="it">
   <head>
@@ -14,10 +9,8 @@
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
   </head>
   <body>
-    <!-- Sveltia dal pacchetto npm: Astro lo unisce al sito e lo serve dal nostro dominio,
-         nessuna CDN esterna (la versione CDN caricherebbe risorse da unpkg e jsDelivr). -->
-    <script>
-      import { init } from "@sveltia/cms";
+    <script type="module">
+      import { init } from "/admin/vendor/sveltia-cms/index.js";
       init();
     </script>
   </body>
